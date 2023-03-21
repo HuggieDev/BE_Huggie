@@ -10,5 +10,5 @@ export class Image {
     url: string
 
     @ManyToOne(() => Review)
-    reveiw: Review
+    review: Review
 }

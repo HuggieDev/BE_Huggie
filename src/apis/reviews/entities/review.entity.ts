@@ -21,10 +21,13 @@ export class Review {
     @Column()
     contents: string
 
-    @Column({ type: 'date' })
-    date: Date
+    @Column({
+        type: 'date',
+        comment: '식당 방문 날짜(음식을 먹은 날짜) 기록 컬럼',
+    })
+    visitDate: Date
 
-    @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 2, scale: 1 })
     score: number
 
     @CreateDateColumn()
