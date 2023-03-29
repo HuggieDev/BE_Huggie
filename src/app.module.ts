@@ -3,9 +3,11 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
+import { ReviewsModule } from './apis/reviews/reviews.module'
 
 @Module({
     imports: [
+        ReviewsModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
             type: process.env.DATABASE_TYPE as 'mysql',
