@@ -16,9 +16,6 @@ export class Review {
     id: string
 
     @Column()
-    title: string
-
-    @Column()
     contents: string
 
     @Column({
