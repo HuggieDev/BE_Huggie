@@ -48,6 +48,6 @@ export class AuthService {
         this.setRefreshToken({ user, res })
 
         // 4. 리다이렉트
-        res.redirect('http://localhost:5500/frontend/socialLogin.html')
+        res.redirect(process.env.SOCIAL_LOGIN_REDIRECT)
     }
 }
