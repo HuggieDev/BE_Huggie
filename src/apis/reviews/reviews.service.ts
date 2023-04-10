@@ -5,6 +5,7 @@ import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 import { StoresService } from '../stores/stores.service'
 import { ReviewImagesService } from '../reviewImages/reviewImages.serviece'
+import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 
 @Injectable()
 export class ReviewsService {
@@ -13,7 +14,8 @@ export class ReviewsService {
         private reviewsRepository: Repository<Review>,
 
         private storesService: StoresService,
-        private reviewImagesService: ReviewImagesService
+        private reviewImagesService: ReviewImagesService,
+        private reviewMenusService: ReviewMenusService
     ) {}
 
     async create({
@@ -21,9 +23,9 @@ export class ReviewsService {
         createStoreInput,
     }: CreateReviewWithStore): Promise<Review> {
         const { menus, imgs, userId, ...rest } = createReviewInput
-        //TODO: 트랜잭션
-
-        //TODO: check user -> guard
+        let reviewImages = null
+        let reviewMenus = null
+        //TODO: 트랜잭션, exceptionFilter
 
         let store = await this.storesService.findOneWithInfo({
             name: createStoreInput.name,
@@ -39,22 +41,29 @@ export class ReviewsService {
             ...rest,
             store,
             user: {
+                //TODO: check user -> user 통으로 넣기
                 id: userId,
             },
         })
 
-        const reviewImages = await this.reviewImagesService.bulkCreate({
-            imgUrls: imgs,
-            reviewId: review.id,
-        })
+        if (imgs.length > 0) {
+            reviewImages = await this.reviewImagesService.bulkCreate({
+                imgUrls: imgs,
+                reviewId: review.id,
+            })
+        }
 
-        //! menu 추가
+        if (menus.length > 0) {
+            reviewMenus = await this.reviewMenusService.bulkCreate({
+                menus,
+                reviewId: review.id,
+            })
+        }
 
         return await this.reviewsRepository.save({
             ...review,
             reviewImages,
+            reviewMenus,
         })
-
-        //TODO: exceptionFilter
     }
 }
