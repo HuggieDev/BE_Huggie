@@ -8,6 +8,7 @@ import { UsersModule } from './apis/users/users.module'
 import { ReviewsModule } from './apis/reviews/reviews.module'
 import { StoreModule } from './apis/stores/stores.module'
 import { ReviewImagesModule } from './apis/reviewImages/reviewImages.module'
+import { ReviewMenusModule } from './apis/reviewMenus/reviewMenus.module'
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { ReviewImagesModule } from './apis/reviewImages/reviewImages.module'
         UsersModule,
         StoreModule,
         ReviewImagesModule,
+        ReviewMenusModule,
         ReviewsModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
