@@ -5,18 +5,18 @@ import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 
 @Injectable()
-export class ReviewsService {  
+export class ReviewsService {
     constructor(
         @InjectRepository(Review)
         private reviewsRepository: Repository<Review>
     ) {}
 
-    async create(
-        createReviewWithStore: CreateReviewWithStore
-    ): Promise<string> {
-        // console.log(createReviewWithStore.createReviewInput)
-        // console.log(createReviewWithStore.createStoreInput)
+    async create({
+        createReviewInput,
+        createStoreInput,
+    }: CreateReviewWithStore): Promise<string> {
         // await this.reviewsRepository.save({})
+        //TODO: img, menu 추가
         return 'body'
     }
 }

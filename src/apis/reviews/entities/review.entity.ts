@@ -1,4 +1,4 @@
-import { IsDateString, IsDecimal, IsNotEmpty, IsUUID } from 'class-validator'
+import { IsNumber, IsUUID, IsNotEmpty } from 'class-validator'
 import { Store } from 'src/apis/stores/entities/store.entity'
 import { User } from 'src/apis/users/entities/user.entity'
 import {
@@ -21,14 +21,14 @@ export class Review {
     @Column()
     contents: string
 
-    @IsDateString({})
+    @IsNotEmpty()
     @Column({
         type: 'date',
         comment: '식당 방문 날짜(음식을 먹은 날짜) 기록 컬럼',
     })
     visitDate: Date
 
-    @IsDecimal()
+    @IsNumber({ maxDecimalPlaces: 1 })
     @Column({ type: 'decimal', precision: 2, scale: 1 })
     score: number
 

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsDecimal, IsUUID } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
@@ -11,11 +11,11 @@ export class Store {
     @Column()
     name: string
 
-    @IsDecimal()
+    @IsNumber()
     @Column({ type: 'decimal', precision: 9, scale: 6 })
     lat: number
 
-    @IsDecimal()
+    @IsNumber()
     @Column({ type: 'decimal', precision: 9, scale: 6 })
     lng: number
 
