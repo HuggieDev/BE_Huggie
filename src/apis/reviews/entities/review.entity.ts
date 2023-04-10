@@ -1,4 +1,7 @@
 import { IsNumber, IsUUID, IsNotEmpty, Min } from 'class-validator'
+import { ReviewImage } from 'src/apis/reviewImages/entities/reviewImage.entity'
+
+import { ReviewMenu } from 'src/apis/reviewMenus/entities/reviewMenu.entity'
 import { Store } from 'src/apis/stores/entities/store.entity'
 import { User } from 'src/apis/users/entities/user.entity'
 import {
@@ -7,6 +10,7 @@ import {
     DeleteDateColumn,
     Entity,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -47,4 +51,10 @@ export class Review {
 
     @ManyToOne(() => Store)
     store: Store
+
+    @OneToMany(() => ReviewImage, (reviewImages) => reviewImages.review)
+    reviewImages: ReviewImage[]
+
+    @OneToMany(() => ReviewMenu, (reviewMenus) => reviewMenus.review)
+    reviewMenus: ReviewMenu[]
 }

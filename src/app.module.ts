@@ -6,11 +6,15 @@ import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from './apis/auth/auth.module'
 import { UsersModule } from './apis/users/users.module'
 import { ReviewsModule } from './apis/reviews/reviews.module'
+import { StoreModule } from './apis/stores/stores.module'
+import { ReviewImagesModule } from './apis/reviewImages/reviewImages.module'
 
 @Module({
     imports: [
         AuthModule,
         UsersModule,
+        StoreModule,
+        ReviewImagesModule,
         ReviewsModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({

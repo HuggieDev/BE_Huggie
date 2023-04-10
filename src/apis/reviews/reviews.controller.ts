@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { ReviewsService } from './reviews.service'
 import { CreateReviewWithStore } from './dto/createReview.dto'
+import { Review } from './entities/review.entity'
 
 @Controller('review')
 export class ReviewsController {
@@ -9,7 +10,7 @@ export class ReviewsController {
     @Post()
     createReview(
         @Body() createReviewWithStore: CreateReviewWithStore
-    ): Promise<string> {
+    ): Promise<Review> {
         return this.reviewsService.create({ ...createReviewWithStore })
     }
 }
