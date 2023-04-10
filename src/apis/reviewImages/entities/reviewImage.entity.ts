@@ -2,7 +2,7 @@ import { Review } from 'src/apis/reviews/entities/review.entity'
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
-export class Image {
+export class ReviewImage {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
