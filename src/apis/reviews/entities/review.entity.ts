@@ -1,4 +1,4 @@
-import { IsNumber, IsUUID, IsNotEmpty } from 'class-validator'
+import { IsNumber, IsUUID, IsNotEmpty, Min } from 'class-validator'
 import { Store } from 'src/apis/stores/entities/store.entity'
 import { User } from 'src/apis/users/entities/user.entity'
 import {
@@ -28,6 +28,7 @@ export class Review {
     })
     visitDate: Date
 
+    @Min(0)
     @IsNumber({ maxDecimalPlaces: 1 })
     @Column({ type: 'decimal', precision: 2, scale: 1 })
     score: number
