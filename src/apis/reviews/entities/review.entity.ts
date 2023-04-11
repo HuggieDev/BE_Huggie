@@ -1,3 +1,6 @@
+import { IsNumber, IsUUID, IsNotEmpty, Min, IsString } from 'class-validator'
+import { ReviewImage } from 'src/apis/reviewImages/entities/reviewImage.entity'
+import { ReviewMenu } from 'src/apis/reviewMenus/entities/reviewMenu.entity'
 import { Store } from 'src/apis/stores/entities/store.entity'
 import { User } from 'src/apis/users/entities/user.entity'
 import {
@@ -6,27 +9,31 @@ import {
     DeleteDateColumn,
     Entity,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
 
 @Entity()
 export class Review {
+    @IsUUID()
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column()
-    title: string
-
+    @IsNotEmpty()
+    @IsString()
     @Column()
     contents: string
 
+    @IsNotEmpty()
     @Column({
         type: 'date',
         comment: '식당 방문 날짜(음식을 먹은 날짜) 기록 컬럼',
     })
     visitDate: Date
 
+    @IsNotEmpty()
+    @IsNumber()
     @Column({ type: 'decimal', precision: 2, scale: 1 })
     score: number
 
@@ -37,11 +44,17 @@ export class Review {
     updatedAt: Date
 
     @DeleteDateColumn()
-    deletedAt: Date
+    deletedAt?: Date
 
     @ManyToOne(() => User)
     user: User
 
     @ManyToOne(() => Store)
     store: Store
+
+    @OneToMany(() => ReviewImage, (reviewImages) => reviewImages.review)
+    reviewImages: ReviewImage[]
+
+    @OneToMany(() => ReviewMenu, (reviewMenus) => reviewMenus.review)
+    reviewMenus: ReviewMenu[]
 }
