@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CreateReviewWithStore } from './dto/createReview.dto'
@@ -6,6 +6,7 @@ import { Review } from './entities/review.entity'
 import { StoresService } from '../stores/stores.service'
 import { ReviewImagesService } from '../reviewImages/reviewImages.serviece'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
+import { UsersService } from '../users/users.service'
 
 @Injectable()
 export class ReviewsService {
@@ -15,7 +16,8 @@ export class ReviewsService {
 
         private storesService: StoresService,
         private reviewImagesService: ReviewImagesService,
-        private reviewMenusService: ReviewMenusService
+        private reviewMenusService: ReviewMenusService,
+        private usersService: UsersService
     ) {}
 
     async create({
@@ -26,6 +28,11 @@ export class ReviewsService {
         let reviewImages = null
         let reviewMenus = null
         //TODO: 트랜잭션, exceptionFilter
+        const user = await this.usersService.findOneById({ userId })
+
+        if (!user) {
+            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
+        }
 
         let store = await this.storesService.findOneWithInfo({
             name: createStoreInput.name,
@@ -40,10 +47,7 @@ export class ReviewsService {
         const review = await this.reviewsRepository.save({
             ...rest,
             store,
-            user: {
-                //TODO: check user -> user 통으로 넣기
-                id: userId,
-            },
+            user,
         })
 
         if (imgs.length > 0) {

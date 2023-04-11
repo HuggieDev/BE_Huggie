@@ -6,6 +6,7 @@ import { ReviewsService } from './reviews.service'
 import { StoreModule } from '../stores/stores.module'
 import { ReviewImagesModule } from '../reviewImages/reviewImages.module'
 import { ReviewMenusModule } from '../reviewMenus/reviewMenus.module'
+import { UsersModule } from '../users/users.module'
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { ReviewMenusModule } from '../reviewMenus/reviewMenus.module'
         StoreModule,
         ReviewImagesModule,
         ReviewMenusModule,
+        UsersModule,
     ],
     providers: [ReviewsService],
     controllers: [ReviewsController],
