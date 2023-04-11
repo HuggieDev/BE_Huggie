@@ -27,7 +27,7 @@ export class ReviewsService {
         const { menus, imgs, userId, ...rest } = createReviewInput
         let reviewImages = null
         let reviewMenus = null
-        //TODO: 트랜잭션, exceptionFilter
+
         const user = await this.usersService.findOneById({ userId })
 
         if (!user) {

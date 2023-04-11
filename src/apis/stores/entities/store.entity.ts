@@ -27,4 +27,3 @@ export class Store {
     @Column()
     jibunAddress: string
 }
-//TODO: lat, lng에 인덱싱
