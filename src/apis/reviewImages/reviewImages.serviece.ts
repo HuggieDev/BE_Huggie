@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ReviewImage } from './entities/reviewImage.entity'
 import { Repository } from 'typeorm'
-import { IReviewImagesBulkCreate } from './reviewImages.interface'
+import { IReviewImagesBulkCreate } from './interfaces/reviewImages.interface'
 
 @Injectable()
 export class ReviewImagesService {

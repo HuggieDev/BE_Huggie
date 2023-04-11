@@ -2,7 +2,7 @@ import { Repository } from 'typeorm'
 import { ReviewMenu } from './entities/reviewMenu.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Injectable } from '@nestjs/common'
-import { IReviewImagesBulkCreate } from './reviewMenus.interface'
+import { IReviewImagesBulkCreate } from './interfaces/reviewMenus.interface'
 
 @Injectable()
 export class ReviewMenusService {
