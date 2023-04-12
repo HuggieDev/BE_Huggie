@@ -5,7 +5,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm'
 import { USER_SOCIAL_TYPE_ENUM } from '../types/user.type'
-import { ApiProperty, ApiResponse } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger'
 
 @Entity()
 export class User {
