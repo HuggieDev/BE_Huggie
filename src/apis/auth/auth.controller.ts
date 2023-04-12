@@ -3,19 +3,19 @@ import { AuthGuard } from '@nestjs/passport'
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
 import { IOAuthUser } from './interfaces/auth.interface'
-import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiExcludeEndpoint, ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 @Controller()
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
+    @ApiExcludeEndpoint()
     @Get('social')
     @ApiOperation({
         summary: '소셜 로그인 API',
-        description: '소셜 로그인을 한다.',
+        description:
+            '카카오로 리다이렉트를 해야하기에 테스트는 안됩니다. method와 endpoint만 확인해 주세요.',
     })
-    @ApiResponse({ status: 200, description: '소셜 로그인 성공' })
-    @ApiResponse({ status: 400, description: '소셜 로그인 실패' })
     @UseGuards(AuthGuard('kakao'))
     async loginKakao(
         @Req() req: Request & IOAuthUser, //
