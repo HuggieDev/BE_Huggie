@@ -45,10 +45,12 @@ export class CreateReviewInput extends PickType(Review, [
 }
 
 export class CreateReviewWithStore {
+    @ApiProperty()
     @ValidateNested()
     @Type(() => CreateReviewInput)
     createReviewInput: CreateReviewInput
 
+    @ApiProperty()
     @ValidateNested()
     @Type(() => CreateStoreInput)
     createStoreInput: CreateStoreInput
