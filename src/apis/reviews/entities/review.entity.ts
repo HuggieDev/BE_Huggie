@@ -17,12 +17,16 @@ import {
 
 @Entity()
 export class Review {
+    @ApiProperty({
+        example: '665a22a7-d465-4cf4-a27c-f8366c2ff83f',
+    })
     @IsUUID()
     @PrimaryGeneratedColumn('uuid')
     id: string
 
     @ApiProperty({
         example: '내용',
+        required: true,
     })
     @IsNotEmpty()
     @IsString()
@@ -31,6 +35,7 @@ export class Review {
 
     @ApiProperty({
         example: '2023-04-12',
+        required: true,
     })
     @IsNotEmpty()
     @Column({
@@ -40,7 +45,8 @@ export class Review {
     visitDate: Date
 
     @ApiProperty({
-        example: 4,
+        example: 4.0,
+        required: true,
     })
     @IsNotEmpty()
     @IsNumber()
@@ -60,7 +66,7 @@ export class Review {
     updatedAt: Date
 
     @ApiProperty({
-        example: '2023-04-12T06:48:36.000Z',
+        example: null,
     })
     @DeleteDateColumn()
     deletedAt?: Date
@@ -74,7 +80,7 @@ export class Review {
 
     @ApiProperty({
         example:
-            'stroe: { name: 은희네, lat: 12.123, lng: 139.1, roadAddresss: 도로명, jibunaddress: 지번, id: f1fd6586-9bdc-458b-8da8-1f96eff7f6fd }',
+            'stroe: { name: 제주은희네해장국 구로디지털단지점, lat: 37.4855, lng: 126.8967, roadAddresss: 도로명, jibunaddress: 지번, id: f1fd6586-9bdc-458b-8da8-1f96eff7f6fd }',
     })
     @ManyToOne(() => Store)
     store: Store
