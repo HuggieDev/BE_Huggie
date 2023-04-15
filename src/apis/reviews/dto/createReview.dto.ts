@@ -1,5 +1,4 @@
 import { Review } from '../entities/review.entity'
-import { PickType } from '@nestjs/mapped-types'
 import {
     IsArray,
     IsNotEmpty,
@@ -10,7 +9,7 @@ import {
 } from 'class-validator'
 import { CreateStoreInput } from 'src/apis/stores/dto/createStore.dto'
 import { Type } from 'class-transformer'
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, PickType } from '@nestjs/swagger'
 
 export class CreateReviewInput extends PickType(Review, [
     'contents',
