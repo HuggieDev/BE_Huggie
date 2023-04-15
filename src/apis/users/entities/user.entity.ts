@@ -10,13 +10,16 @@ import { IsNotEmpty, IsString, IsUUID } from 'class-validator'
 
 @Entity()
 export class User {
+    @ApiProperty({
+        example: '0dc011aa-d76e-11ed-afa1-0242ac120002',
+    })
     @IsUUID()
     @PrimaryGeneratedColumn('uuid')
     id: string
 
     @ApiProperty({
         example: '허기져',
-        description: '사용자 닉네임',
+        required: true,
     })
     @IsNotEmpty()
     @IsString()
@@ -27,14 +30,21 @@ export class User {
     @IsString()
     @ApiProperty({
         example: 'huggie@kakao.com',
-        description: '사용자 이메일',
+        required: true,
     })
     @Column()
     email: string
 
+    @ApiProperty({
+        example: 'KAKAO',
+        type: 'enum',
+    })
     @Column({ type: 'enum', enum: USER_SOCIAL_TYPE_ENUM })
     socialType: string
 
+    @ApiProperty({
+        example: null,
+    })
     @DeleteDateColumn()
     deletedAt: Date
 }
