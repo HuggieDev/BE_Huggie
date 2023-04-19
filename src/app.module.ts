@@ -9,9 +9,11 @@ import { ReviewsModule } from './apis/reviews/reviews.module'
 import { StoreModule } from './apis/stores/stores.module'
 import { ReviewImagesModule } from './apis/reviewImages/reviewImages.module'
 import { ReviewMenusModule } from './apis/reviewMenus/reviewMenus.module'
+import { FilesModule } from './apis/file/files.module'
 
 @Module({
     imports: [
+        FilesModule,
         AuthModule,
         UsersModule,
         StoreModule,
