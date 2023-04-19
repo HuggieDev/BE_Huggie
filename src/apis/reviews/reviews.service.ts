@@ -4,7 +4,7 @@ import { Repository } from 'typeorm'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 import { StoresService } from '../stores/stores.service'
-import { ReviewImagesService } from '../reviewImages/reviewImages.serviece'
+import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
 
