@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import * as AWS from 'aws-sdk'
 import { getToday } from 'src/commons/util/date.util'
 import { v4 as uuidv4 } from 'uuid'
@@ -16,24 +16,18 @@ export class FilesService {
     }
 
     async uploadImages(files: Array<Express.Multer.File>) {
-        //TODO: 사이즈 제한, 타입제한
-
-        const pendingFiles = []
-
-        //FIXME: 왜 map 돌리면 안되는겨?
-
-        for (let i = 0; i < files.length; i++) {
-            const pendingFile = this.s3
-                .upload({
-                    Bucket: process.env.AWS_BUCKET_NAME,
-                    ACL: 'public-read',
-                    Key: `${getToday()}/${uuidv4()}/origin/${uuidv4()}`,
-                    Body: files[i].buffer,
-                    ContentType: files[i].mimetype,
-                })
-                .promise()
-            pendingFiles.push(pendingFile)
-        }
+        const pendingFiles = files.map(
+            async (file) =>
+                await this.s3
+                    .upload({
+                        Bucket: process.env.AWS_BUCKET_NAME,
+                        ACL: 'public-read',
+                        Key: `${getToday()}/${uuidv4()}/origin/${uuidv4()}`,
+                        Body: file.buffer,
+                        ContentType: file.mimetype,
+                    })
+                    .promise()
+        )
 
         return (await Promise.all(pendingFiles)).map((e) => e.Location)
     }
