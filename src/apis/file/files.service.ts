@@ -15,7 +15,7 @@ export class FilesService {
         })
     }
 
-    async uploadImages(files: Array<Express.Multer.File>) {
+    async uploadImages(files: Array<Express.Multer.File>): Promise<String[]> {
         const pendingFiles = files.map(
             async (file) =>
                 await this.s3
