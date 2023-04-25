@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator'
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import { Review } from 'src/apis/reviews/entities/review.entity'
+import {
+    Column,
+    Entity,
+    Index,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm'
 
 @Entity()
 export class Store {
@@ -50,4 +57,10 @@ export class Store {
     @IsNotEmpty()
     @Column()
     jibunAddress: string
+
+    @ApiProperty({
+        example: 'review: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }',
+    })
+    @OneToMany(() => Review, (reviews) => reviews.store)
+    reviews: Review[]
 }
