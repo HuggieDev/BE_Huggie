@@ -18,4 +18,16 @@ export class StoresService {
     async findOneWithInfo(info: FindOptionsWhere<Store>): Promise<Store> {
         return await this.storeRepository.findOne({ where: { ...info } })
     }
+
+    async findStores({ userId }): Promise<Store[]> {
+        return await this.storeRepository.find({
+            where: {
+                reviews: {
+                    user: {
+                        id: userId,
+                    },
+                },
+            },
+        })
+    }
 }
