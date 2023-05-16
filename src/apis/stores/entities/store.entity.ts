@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Type } from 'class-transformer'
 import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator'
 import { Review } from 'src/apis/reviews/entities/review.entity'
 import {
@@ -29,6 +30,7 @@ export class Store {
     @ApiProperty({
         example: 37.4855,
     })
+    @Type(() => Number)
     @IsNumber()
     @Index()
     @Column({ type: 'decimal', precision: 9, scale: 6 })
@@ -37,6 +39,7 @@ export class Store {
     @ApiProperty({
         example: 126.8967,
     })
+    @Type(() => Number)
     @IsNumber()
     @Index()
     @Column({ type: 'decimal', precision: 9, scale: 6 })
