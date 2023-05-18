@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import * as AWS from 'aws-sdk'
-import { getToday } from 'src/commons/util/date.util'
+import { getToday } from 'src/commons/util/utils'
 import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
