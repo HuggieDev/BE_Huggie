@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common'
+import { Body, Controller, Patch, Post, Req } from '@nestjs/common'
 import { ReviewsService } from './reviews.service'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
@@ -25,7 +25,7 @@ export class ReviewsController {
         return this.reviewsService.create({ ...createReviewWithStore })
     }
 
-    @Post()
+    @Patch(':id')
     updateReview(
         @Body() reviewId: string,
         @Body() updateReviewInput: UpdateReviewInput
