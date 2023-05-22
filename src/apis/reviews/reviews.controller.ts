@@ -29,7 +29,7 @@ export class ReviewsController {
     updateReview(
         @Body() reviewId: string,
         @Body() updateReviewInput: UpdateReviewInput
-    ): Promise<void> {
+    ): Promise<Review> {
         return this.reviewsService.update({ reviewId, updateReviewInput })
     }
 }

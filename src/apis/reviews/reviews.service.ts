@@ -21,6 +21,14 @@ export class ReviewsService {
         private usersService: UsersService
     ) {}
 
+    findOne({ reviewId }): Promise<Review> {
+        return this.reviewsRepository.findOne({
+            where: {
+                id: reviewId,
+            },
+        })
+    }
+
     async create({
         createReviewInput,
         createStoreInput,
@@ -75,7 +83,9 @@ export class ReviewsService {
     async update({
         reviewId,
         updateReviewInput,
-    }: IReivewServiceUpdate): Promise<void> {
+    }: IReivewServiceUpdate): Promise<Review> {
+        const review = await this.findOne({ reviewId })
+
         return
     }
 }
