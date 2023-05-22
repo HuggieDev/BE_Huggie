@@ -7,6 +7,7 @@ import { StoresService } from '../stores/stores.service'
 import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
+import { IReivewServiceUpdate } from './interfaces/review.interface'
 
 @Injectable()
 export class ReviewsService {
@@ -71,7 +72,10 @@ export class ReviewsService {
         })
     }
 
-    async update({ body }): Promise<string> {
-        return 'body'
+    async update({
+        reviewId,
+        updateReviewInput,
+    }: IReivewServiceUpdate): Promise<void> {
+        return
     }
 }

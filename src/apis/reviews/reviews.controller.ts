@@ -4,6 +4,7 @@ import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 import { Request } from 'express'
+import { UpdateReviewInput } from './dto/updateReview.dto'
 
 @Controller('review')
 export class ReviewsController {
@@ -25,7 +26,10 @@ export class ReviewsController {
     }
 
     @Post()
-    updateReview(@Req() req: Request): Promise<string> {
-        return this.reviewsService.update({ ...req.body })
+    updateReview(
+        @Body() reviewId: string,
+        @Body() updateReviewInput: UpdateReviewInput
+    ): Promise<void> {
+        return this.reviewsService.update({ reviewId, updateReviewInput })
     }
 }
