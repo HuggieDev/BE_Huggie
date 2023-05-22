@@ -70,4 +70,8 @@ export class ReviewsService {
             reviewMenus,
         })
     }
+
+    async update({ body }): Promise<string> {
+        return 'body'
+    }
 }
