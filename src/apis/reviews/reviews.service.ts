@@ -84,8 +84,31 @@ export class ReviewsService {
         reviewId,
         updateReviewInput,
     }: IReivewServiceUpdate): Promise<Review> {
-        const review = await this.findOne({ reviewId })
+        const { userId, ...rest } = updateReviewInput
 
-        return
+        const user = await this.usersService.findOneById({ userId })
+
+        if (!user) {
+            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
+        }
+
+        const prevReview = await this.findOne({ reviewId })
+        console.log('수정 전: ', prevReview)
+
+        const result = await this.reviewsRepository.save({
+            ...prevReview,
+            ...rest,
+            user,
+        })
+
+        console.log('수정 후: ', result)
+
+        // 메뉴 태그 수정 반영
+
+        // 이미지 수정 반영
+
+        // 수정 전 메뉴 태그 삭제
+
+        return result
     }
 }
