@@ -25,7 +25,7 @@ export class ReviewsController {
         return this.reviewsService.create({ ...createReviewWithStore })
     }
 
-    @Patch(':id')
+    @Patch(':reviewId')
     updateReview(
         @Param('reviewId') reviewId: string,
         @Body() updateReviewInput: UpdateReviewInput
