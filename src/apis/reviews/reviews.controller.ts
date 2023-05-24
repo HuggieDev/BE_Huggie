@@ -26,6 +26,14 @@ export class ReviewsController {
     }
 
     @Patch(':reviewId')
+    @ApiOperation({
+        summary: '리뷰 수정 API',
+    })
+    @ApiResponse({
+        status: 201,
+        description: '리뷰 수정 성공',
+        type: Review,
+    })
     updateReview(
         @Param('reviewId') reviewId: string,
         @Body() updateReviewInput: UpdateReviewInput
