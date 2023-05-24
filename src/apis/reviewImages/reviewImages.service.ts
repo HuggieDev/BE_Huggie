@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ReviewImage } from './entities/reviewImage.entity'
 import { Repository } from 'typeorm'
-import { IReviewImagesBulkCreate } from './interfaces/reviewImages.interface'
+import {
+    IReviewImagesBulkCreate,
+    IReviewImagesFindById,
+} from './interfaces/reviewImages.interface'
 
 @Injectable()
 export class ReviewImagesService {
@@ -11,7 +14,9 @@ export class ReviewImagesService {
         private reviewImagesRepository: Repository<ReviewImage>
     ) {}
 
-    async findById({ reviewId }) {
+    async findById({
+        reviewId,
+    }: IReviewImagesFindById): Promise<ReviewImage[]> {
         return await this.reviewImagesRepository.find({
             where: { review: { id: reviewId } },
             relations: ['review'],
