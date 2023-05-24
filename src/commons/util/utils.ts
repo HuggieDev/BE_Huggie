@@ -5,3 +5,17 @@ export const getToday = () => {
     const dd = (date.getDate() + '').padStart(2, '0')
     return `${yyyy}-${mm}-${dd}`
 }
+
+export const getPagination = ({
+    page = 1,
+    pageSize = 24,
+}: {
+    page: number
+    pageSize: number
+}): number => {
+    let start = 0
+    if (page <= 0) page = 1
+    else start = (page - 1) * pageSize
+
+    return start
+}
