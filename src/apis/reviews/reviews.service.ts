@@ -7,6 +7,7 @@ import { StoresService } from '../stores/stores.service'
 import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
+import { getPagination } from 'src/commons/util/utils'
 
 @Injectable()
 export class ReviewsService {
@@ -68,6 +69,22 @@ export class ReviewsService {
             ...review,
             reviewImages,
             reviewMenus,
+        })
+    }
+
+    async findAll({ userId, page }) {
+        const pageSize = 10
+        const skip = getPagination({ page, pageSize })
+
+        return this.reviewsRepository.find({
+            where: {
+                user: {
+                    id: userId,
+                },
+            },
+            relations: ['user'],
+            take: pageSize,
+            skip,
         })
     }
 }
