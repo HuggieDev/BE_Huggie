@@ -105,6 +105,10 @@ export class ReviewsService {
             reviewId,
         })
 
+        if (prevReviewImg) {
+            await this.reviewImagesService.delete({ reviewId })
+        }
+
         return result
     }
 }

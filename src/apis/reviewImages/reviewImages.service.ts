@@ -31,4 +31,10 @@ export class ReviewImagesService {
             }))
         )
     }
+
+    async delete({ reviewId }) {
+        return await this.reviewImagesRepository.delete({
+            review: reviewId,
+        })
+    }
 }
