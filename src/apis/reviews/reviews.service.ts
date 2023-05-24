@@ -84,7 +84,9 @@ export class ReviewsService {
         reviewId,
         updateReviewInput,
     }: IReivewServiceUpdate): Promise<Review> {
-        const { userId, ...rest } = updateReviewInput
+        const { userId, imgs } = updateReviewInput
+
+        let reviewImages = null
 
         const user = await this.usersService.findOneById({ userId })
 
@@ -93,6 +95,14 @@ export class ReviewsService {
         }
 
         const prevReview = await this.findOne({ reviewId })
+
+        const { id, ...rest } = prevReview
+
+        const review = await this.reviewsRepository.save({
+            id,
+            ...rest,
+            user,
+        })
 
         const result = await this.reviewsRepository.save({
             ...prevReview,
@@ -109,6 +119,17 @@ export class ReviewsService {
             await this.reviewImagesService.delete({ reviewId })
         }
 
-        return result
+        if (imgs.length > 0) {
+            reviewImages = await this.reviewImagesService.bulkCreate({
+                imgUrls: imgs,
+                reviewId,
+            })
+        }
+
+        return await this.reviewsRepository.save({
+            ...review,
+            user,
+            reviewImages,
+        })
     }
 }
