@@ -11,6 +11,13 @@ export class ReviewImagesService {
         private reviewImagesRepository: Repository<ReviewImage>
     ) {}
 
+    async findById({ reviewId }) {
+        return await this.reviewImagesRepository.find({
+            where: { review: { id: reviewId } },
+            relations: ['review'],
+        })
+    }
+
     async bulkCreate({
         imgUrls,
         reviewId,

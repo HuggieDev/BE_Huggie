@@ -93,7 +93,6 @@ export class ReviewsService {
         }
 
         const prevReview = await this.findOne({ reviewId })
-        console.log('수정 전: ', prevReview)
 
         const result = await this.reviewsRepository.save({
             ...prevReview,
@@ -101,13 +100,10 @@ export class ReviewsService {
             user,
         })
 
-        console.log('수정 후: ', result)
-
-        // 메뉴 태그 수정 반영
-
-        // 이미지 수정 반영
-
-        // 수정 전 메뉴 태그 삭제
+        // 기존 등록되어 있는 이미지 조회
+        const prevReviewImg = await this.reviewImagesService.findById({
+            reviewId,
+        })
 
         return result
     }
