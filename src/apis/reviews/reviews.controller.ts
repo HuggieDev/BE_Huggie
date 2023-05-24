@@ -44,7 +44,6 @@ export class ReviewsController {
         @Param('userId', ParseUUIDPipe) userId: string,
         @Query('page') page: number
     ) {
-        console.log(userId)
-        console.log(page)
+        return this.reviewsService.findAll({ userId, page })
     }
 }

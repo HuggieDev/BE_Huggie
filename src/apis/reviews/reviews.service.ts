@@ -70,4 +70,17 @@ export class ReviewsService {
             reviewMenus,
         })
     }
+
+    async findAll({ userId, page }) {
+        return this.reviewsRepository.find({
+            where: {
+                user: {
+                    id: userId,
+                },
+            },
+            relations: ['user'],
+            skip: 0,
+            //뭐더라
+        })
+    }
 }
