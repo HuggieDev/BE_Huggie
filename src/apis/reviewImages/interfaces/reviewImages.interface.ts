@@ -6,3 +6,7 @@ export interface IReviewImagesBulkCreate {
 export interface IReviewImagesFindById {
     reviewId: string
 }
+
+export interface IReviewImagesDelete {
+    reviewId: string
+}

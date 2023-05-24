@@ -4,6 +4,7 @@ import { ReviewImage } from './entities/reviewImage.entity'
 import { Repository } from 'typeorm'
 import {
     IReviewImagesBulkCreate,
+    IReviewImagesDelete,
     IReviewImagesFindById,
 } from './interfaces/reviewImages.interface'
 
@@ -37,9 +38,9 @@ export class ReviewImagesService {
         )
     }
 
-    async delete({ reviewId }) {
+    async delete({ reviewId }: IReviewImagesDelete) {
         return await this.reviewImagesRepository.delete({
-            review: reviewId,
+            review: { id: reviewId },
         })
     }
 }
