@@ -1,4 +1,14 @@
-import { Body, Controller, Param, Patch, Post, Req } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    Patch,
+    ParseUUIDPipe,
+    Post,
+    Req,
+    Query,
+} from '@nestjs/common'
 import { ReviewsService } from './reviews.service'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
@@ -39,5 +49,21 @@ export class ReviewsController {
         @Body() updateReviewInput: UpdateReviewInput
     ): Promise<Review> {
         return this.reviewsService.update({ reviewId, updateReviewInput })
+    }
+    
+    @Get(':userId')
+    @ApiOperation({
+        summary: '유저가 작성한 리뷰 조회',
+    })
+    @ApiResponse({
+        status: 201,
+        description: '조회 성공.',
+        type: [Review],
+    })
+    fetchReviews(
+        @Param('userId', ParseUUIDPipe) userId: string,
+        @Query('page') page: number
+    ) {
+        return this.reviewsService.findAll({ userId, page })
     }
 }
