@@ -7,6 +7,7 @@ import { StoresService } from '../stores/stores.service'
 import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
+import { IReivewServiceUpdate } from './interfaces/review.interface'
 import { getPagination } from 'src/commons/util/utils'
 
 @Injectable()
@@ -20,6 +21,14 @@ export class ReviewsService {
         private reviewMenusService: ReviewMenusService,
         private usersService: UsersService
     ) {}
+
+    findOne({ reviewId }): Promise<Review> {
+        return this.reviewsRepository.findOne({
+            where: {
+                id: reviewId,
+            },
+        })
+    }
 
     async create({
         createReviewInput,
@@ -72,6 +81,60 @@ export class ReviewsService {
         })
     }
 
+
+    async update({
+        reviewId,
+        updateReviewInput,
+    }: IReivewServiceUpdate): Promise<Review> {
+        const { userId, imgs } = updateReviewInput
+
+        let reviewImages = null
+
+        const user = await this.usersService.findOneById({ userId })
+
+        if (!user) {
+            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
+        }
+
+        const prevReview = await this.findOne({ reviewId })
+
+        const { id, ...rest } = prevReview
+
+        const review = await this.reviewsRepository.save({
+            id,
+            ...rest,
+            user,
+        })
+
+        const result = await this.reviewsRepository.save({
+            ...prevReview,
+            ...rest,
+            user,
+        })
+
+        // 기존 등록되어 있는 이미지 조회
+        const prevReviewImg = await this.reviewImagesService.findById({
+            reviewId,
+        })
+
+        if (prevReviewImg) {
+            await this.reviewImagesService.delete({ reviewId })
+        }
+
+        if (imgs.length > 0) {
+            reviewImages = await this.reviewImagesService.bulkCreate({
+                imgUrls: imgs,
+                reviewId,
+            })
+        }
+
+        return await this.reviewsRepository.save({
+            ...review,
+            user,
+            reviewImages,
+           })
+    }
+    
     async findAll({ userId, page }) {
         const pageSize = 10
         const skip = getPagination({ page, pageSize })
