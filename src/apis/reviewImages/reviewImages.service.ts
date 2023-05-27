@@ -24,4 +24,8 @@ export class ReviewImagesService {
             }))
         )
     }
+
+    async add() {
+        console.log('이미지 추가 성공')
+    }
 }

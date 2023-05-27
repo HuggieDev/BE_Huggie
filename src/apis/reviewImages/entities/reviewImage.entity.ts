@@ -18,6 +18,7 @@ export class ReviewImage {
     url: string
 
     @ApiProperty({
+        type: () => Review,
         example: 'review: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }',
     })
     @ManyToOne(() => Review)
