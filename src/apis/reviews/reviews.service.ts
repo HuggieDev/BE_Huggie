@@ -1,4 +1,9 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common'
+import {
+    Inject,
+    Injectable,
+    UnprocessableEntityException,
+    forwardRef,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CreateReviewWithStore } from './dto/createReview.dto'
@@ -16,6 +21,7 @@ export class ReviewsService {
         private reviewsRepository: Repository<Review>,
 
         private storesService: StoresService,
+        @Inject(forwardRef(() => ReviewImagesService))
         private reviewImagesService: ReviewImagesService,
         private reviewMenusService: ReviewMenusService,
         private usersService: UsersService

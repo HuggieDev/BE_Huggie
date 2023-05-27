@@ -1,4 +1,9 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common'
+import {
+    Inject,
+    Injectable,
+    UnprocessableEntityException,
+    forwardRef,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ReviewImage } from './entities/reviewImage.entity'
 import { Repository } from 'typeorm'
@@ -15,9 +20,11 @@ export class ReviewImagesService {
         @InjectRepository(ReviewImage)
         private reviewImagesRepository: Repository<ReviewImage>,
 
-        private readonly usersService: UsersService
-    ) // private readonly reviewsService: ReviewsService
-    {}
+        private usersService: UsersService,
+
+        @Inject(forwardRef(() => ReviewsService))
+        private reviewsService: ReviewsService
+    ) {}
 
     async bulkCreate({
         imgUrls,
