@@ -10,3 +10,9 @@ export interface IReviewImagesFindById {
 export interface IReviewImagesDelete {
     reviewId: string
 }
+
+export interface IReveiwImagesAdd {
+    userId: string
+    reviewId: string
+    url: string
+}

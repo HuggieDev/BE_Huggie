@@ -1,7 +1,8 @@
-import { Controller, Post } from '@nestjs/common'
+import { Body, Controller, Post } from '@nestjs/common'
 import { ReviewImagesService } from './reviewImages.service'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 import { ReviewImage } from './entities/reviewImage.entity'
+import { AddReviewimageInput } from './dto/addReviewImage.dto'
 
 @Controller('reviewImage')
 export class ReviewImagesController {
@@ -16,7 +17,9 @@ export class ReviewImagesController {
         description: '추가 성공.',
         type: ReviewImage,
     })
-    addReviewImage() {
-        return this.reviewImagesService.add()
+    addReviewImage(
+        @Body() addReviewImageInput: AddReviewimageInput
+    ): Promise<ReviewImage> {
+        return this.reviewImagesService.add({ ...addReviewImageInput })
     }
 }

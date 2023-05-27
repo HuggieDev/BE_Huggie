@@ -1,15 +1,23 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ReviewImage } from './entities/reviewImage.entity'
 import { Repository } from 'typeorm'
-import { IReviewImagesBulkCreate } from './interfaces/reviewImages.interface'
+import {
+    IReveiwImagesAdd,
+    IReviewImagesBulkCreate,
+} from './interfaces/reviewImages.interface'
+import { UsersService } from '../users/users.service'
+import { ReviewsService } from '../reviews/reviews.service'
 
 @Injectable()
 export class ReviewImagesService {
     constructor(
         @InjectRepository(ReviewImage)
-        private reviewImagesRepository: Repository<ReviewImage>
-    ) {}
+        private reviewImagesRepository: Repository<ReviewImage>,
+
+        private readonly usersService: UsersService
+    ) // private readonly reviewsService: ReviewsService
+    {}
 
     async bulkCreate({
         imgUrls,
@@ -25,7 +33,13 @@ export class ReviewImagesService {
         )
     }
 
-    async add() {
-        console.log('이미지 추가 성공')
+    async add({ userId, reviewId, url }: IReveiwImagesAdd): Promise<any> {
+        const user = await this.usersService.findOneById({ userId })
+
+        if (!user) {
+            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
+        }
+
+        // const review = await this.reviewsService.
     }
 }
