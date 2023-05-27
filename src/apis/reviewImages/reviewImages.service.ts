@@ -2,11 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ReviewImage } from './entities/reviewImage.entity'
 import { Repository } from 'typeorm'
-import {
-    IReviewImagesBulkCreate,
-    IReviewImagesDelete,
-    IReviewImagesFindById,
-} from './interfaces/reviewImages.interface'
+import { IReviewImagesBulkCreate } from './interfaces/reviewImages.interface'
 
 @Injectable()
 export class ReviewImagesService {
@@ -14,15 +10,6 @@ export class ReviewImagesService {
         @InjectRepository(ReviewImage)
         private reviewImagesRepository: Repository<ReviewImage>
     ) {}
-
-    async findById({
-        reviewId,
-    }: IReviewImagesFindById): Promise<ReviewImage[]> {
-        return await this.reviewImagesRepository.find({
-            where: { review: { id: reviewId } },
-            relations: ['review'],
-        })
-    }
 
     async bulkCreate({
         imgUrls,
@@ -36,11 +23,5 @@ export class ReviewImagesService {
                 },
             }))
         )
-    }
-
-    async delete({ reviewId }: IReviewImagesDelete) {
-        return await this.reviewImagesRepository.delete({
-            review: { id: reviewId },
-        })
     }
 }
