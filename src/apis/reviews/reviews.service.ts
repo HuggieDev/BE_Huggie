@@ -81,7 +81,6 @@ export class ReviewsService {
         })
     }
 
-
     async update({
         reviewId,
         updateReviewInput,
@@ -132,9 +131,9 @@ export class ReviewsService {
             ...review,
             user,
             reviewImages,
-           })
+        })
     }
-    
+
     async findAll({ userId, page }) {
         const pageSize = 10
         const skip = getPagination({ page, pageSize })
@@ -149,5 +148,20 @@ export class ReviewsService {
             take: pageSize,
             skip,
         })
+    }
+
+    async fetchOne({ reviewId }) {
+        const review = await this.reviewsRepository.findOne({
+            where: {
+                id: reviewId,
+            },
+            relations: ['user', 'store', 'reviewMenus', 'reviewImages'],
+        })
+
+        if (!review) {
+            throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
+        }
+
+        return review
     }
 }

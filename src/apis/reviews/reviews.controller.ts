@@ -72,11 +72,16 @@ export class ReviewsController {
         summary: '리뷰 개별 조회',
     })
     @ApiResponse({
-        status: 201,
+        status: 200,
         description: '조회 성공.',
         type: Review,
     })
+    @ApiResponse({
+        status: 422,
+        description: '조회 실패',
+        type: Error,
+    })
     fetchReview(@Param('reviewId', ParseUUIDPipe) reviewId: string) {
-        console.log(reviewId)
+        return this.reviewsService.fetchOne({ reviewId })
     }
 }
