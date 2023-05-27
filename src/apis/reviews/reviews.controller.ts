@@ -16,7 +16,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 import { Request } from 'express'
 import { UpdateReviewInput } from './dto/updateReview.dto'
 
-@Controller('review')
+@Controller('reviews')
 export class ReviewsController {
     constructor(private readonly reviewsService: ReviewsService) {}
 
@@ -50,7 +50,7 @@ export class ReviewsController {
     ): Promise<Review> {
         return this.reviewsService.update({ reviewId, updateReviewInput })
     }
-    
+
     @Get(':userId')
     @ApiOperation({
         summary: '유저가 작성한 리뷰 조회',
@@ -65,5 +65,18 @@ export class ReviewsController {
         @Query('page') page: number
     ) {
         return this.reviewsService.findAll({ userId, page })
+    }
+
+    @Get('/review/:reviewId')
+    @ApiOperation({
+        summary: '리뷰 개별 조회',
+    })
+    @ApiResponse({
+        status: 201,
+        description: '조회 성공.',
+        type: Review,
+    })
+    fetchReview(@Param('reviewId', ParseUUIDPipe) reviewId: string) {
+        console.log(reviewId)
     }
 }
