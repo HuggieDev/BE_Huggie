@@ -40,13 +40,26 @@ export class ReviewImagesService {
         )
     }
 
-    async add({ userId, reviewId, url }: IReveiwImagesAdd): Promise<any> {
+    async add({
+        userId,
+        reviewId,
+        url,
+    }: IReveiwImagesAdd): Promise<ReviewImage> {
         const user = await this.usersService.findOneById({ userId })
 
         if (!user) {
             throw new UnprocessableEntityException('유저가 존재하지 않습니다')
         }
 
-        // const review = await this.reviewsService.
+        const review = await this.reviewsService.fetchOne({ reviewId })
+
+        if (!review) {
+            throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
+        }
+
+        return await this.reviewImagesRepository.save({
+            url,
+            review,
+        })
     }
 }
