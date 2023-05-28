@@ -63,7 +63,22 @@ export class ReviewImagesService {
         })
     }
 
-    async delete() {
-        console.log('삭제 성공')
+    async delete({ imageId, userId, reviewId }): Promise<boolean> {
+        const user = await this.usersService.findOneById({ userId })
+
+        if (!user) {
+            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
+        }
+
+        const review = await this.reviewsService.fetchOne({ reviewId })
+
+        if (!review) {
+            throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
+        }
+
+        const result = await this.reviewImagesRepository.softDelete({
+            id: imageId,
+        })
+        return result.affected ? true : false
     }
 }

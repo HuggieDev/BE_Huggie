@@ -43,8 +43,10 @@ export class ReviewImagesController {
     deleteReviewimage(
         @Param('imageId', ParseUUIDPipe) imageId: string,
         @Body() deleteReviewimageInput: DeleteReviewImageInput
-    ) {
-        console.log(imageId)
-        console.log(deleteReviewimageInput)
+    ): Promise<boolean> {
+        return this.reviewImagesService.delete({
+            imageId,
+            ...deleteReviewimageInput,
+        })
     }
 }
