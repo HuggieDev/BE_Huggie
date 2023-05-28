@@ -1,7 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsUUID } from 'class-validator'
+import { IsDateString, IsNotEmpty, IsUUID } from 'class-validator'
 import { Review } from 'src/apis/reviews/entities/review.entity'
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+    Column,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm'
 
 @Entity()
 export class ReviewImage {
@@ -19,6 +25,13 @@ export class ReviewImage {
     @IsNotEmpty()
     @Column()
     url: string
+
+    @ApiProperty({
+        example: '2023-05-28T06:48:36.000Z',
+    })
+    @IsDateString()
+    @DeleteDateColumn()
+    deletedAt?: Date
 
     @ApiProperty({
         type: () => Review,
