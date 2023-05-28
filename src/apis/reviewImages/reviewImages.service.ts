@@ -62,4 +62,8 @@ export class ReviewImagesService {
             review,
         })
     }
+
+    async delete() {
+        console.log('삭제 성공')
+    }
 }
