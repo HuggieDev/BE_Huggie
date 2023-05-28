@@ -1,8 +1,16 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Delete,
+    Param,
+    ParseUUIDPipe,
+    Post,
+} from '@nestjs/common'
 import { ReviewImagesService } from './reviewImages.service'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 import { ReviewImage } from './entities/reviewImage.entity'
 import { AddReviewimageInput } from './dto/addReviewImage.dto'
+import { DeleteReviewImageInput } from './dto/deleteReviewImage.dto'
 
 @Controller('reviewImage')
 export class ReviewImagesController {
@@ -23,15 +31,20 @@ export class ReviewImagesController {
         return this.reviewImagesService.add({ ...addReviewImageInput })
     }
 
-    @Delete()
+    @Delete(':imageId')
     @ApiOperation({
         summary: '이미지 삭제 API',
     })
     @ApiResponse({
-        status: 201,
+        status: 200,
         description: '삭제 성공.',
+        type: Boolean,
     })
-    deleteReviewimage() {
-        return this.reviewImagesService.delete()
+    deleteReviewimage(
+        @Param('imageId', ParseUUIDPipe) imageId: string,
+        @Body() deleteReviewimageInput: DeleteReviewImageInput
+    ) {
+        console.log(imageId)
+        console.log(deleteReviewimageInput)
     }
 }
