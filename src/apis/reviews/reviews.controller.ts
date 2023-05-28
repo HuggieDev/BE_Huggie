@@ -3,18 +3,14 @@ import {
     Controller,
     Get,
     Param,
-    Patch,
     ParseUUIDPipe,
     Post,
-    Req,
     Query,
 } from '@nestjs/common'
 import { ReviewsService } from './reviews.service'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
-import { Request } from 'express'
-import { UpdateReviewInput } from './dto/updateReview.dto'
 
 @Controller('reviews')
 export class ReviewsController {
@@ -33,22 +29,6 @@ export class ReviewsController {
         @Body() createReviewWithStore: CreateReviewWithStore
     ): Promise<Review> {
         return this.reviewsService.create({ ...createReviewWithStore })
-    }
-
-    @Patch(':reviewId')
-    @ApiOperation({
-        summary: '리뷰 수정 API',
-    })
-    @ApiResponse({
-        status: 201,
-        description: '리뷰 수정 성공',
-        type: Review,
-    })
-    updateReview(
-        @Param('reviewId') reviewId: string,
-        @Body() updateReviewInput: UpdateReviewInput
-    ): Promise<Review> {
-        return this.reviewsService.update({ reviewId, updateReviewInput })
     }
 
     @Get(':userId')
