@@ -76,9 +76,26 @@ export class ReviewImagesService {
             throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
         }
 
+        await this.fetchOne({ imageId })
+
         const result = await this.reviewImagesRepository.softDelete({
             id: imageId,
         })
         return result.affected ? true : false
+    }
+
+    async fetchOne({ imageId }) {
+        const reviewImage = await this.reviewImagesRepository.findOne({
+            where: {
+                id: imageId,
+            },
+            relations: ['review'],
+        })
+
+        if (!reviewImage) {
+            throw new UnprocessableEntityException(
+                '리뷰 이미지가 존재하지 않습니다.'
+            )
+        }
     }
 }
