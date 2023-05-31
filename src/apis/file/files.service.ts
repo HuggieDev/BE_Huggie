@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common'
 import * as AWS from 'aws-sdk'
 import { getToday } from 'src/commons/util/utils'
 import { v4 as uuidv4 } from 'uuid'
+import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 
 @Injectable()
 export class FilesService {
     private readonly s3
 
-    constructor() {
+    constructor(private reviewImagesService: ReviewImagesService) {
         this.s3 = new AWS.S3({
             accessKeyId: process.env.AWS_S3_ACCESS_KEY,
             secretAccessKey: process.env.AWS_S3_SECRET_KEY,
@@ -32,5 +33,8 @@ export class FilesService {
         return (await Promise.all(pendingFiles)).map((e) => e.Location)
     }
 
-    // TODO: delete
+    async deleteImage({ imageId }) {
+        const image = await this.reviewImagesService.fetchOne({ imageId })
+        console.log(image)
+    }
 }
