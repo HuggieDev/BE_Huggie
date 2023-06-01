@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import * as AWS from 'aws-sdk'
 import { getToday } from 'src/commons/util/utils'
 import { v4 as uuidv4 } from 'uuid'
 import { ReviewImagesService } from '../reviewImages/reviewImages.service'
+import { IFilesDeleteImage } from './interfaces/files.interface'
 
 @Injectable()
 export class FilesService {
@@ -33,8 +34,26 @@ export class FilesService {
         return (await Promise.all(pendingFiles)).map((e) => e.Location)
     }
 
-    async deleteImage({ imageId }) {
+    async deleteImage({ imageId }: IFilesDeleteImage): Promise<boolean> {
         const image = await this.reviewImagesService.fetchOne({ imageId })
-        console.log(image)
+        const param = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: image.url.split('.com/')[1],
+        }
+
+        if (!param.Key) {
+            throw new UnprocessableEntityException(
+                '클라우드 내에 이미지 파일이 존재하지 않습니다.'
+            )
+        }
+
+        await this.s3
+            .deleteObject({
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: image.url.split('.com/')[1],
+            })
+            .promise()
+
+        return true
     }
 }
