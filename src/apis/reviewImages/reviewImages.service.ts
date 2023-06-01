@@ -97,5 +97,6 @@ export class ReviewImagesService {
                 '리뷰 이미지가 존재하지 않습니다.'
             )
         }
+        return reviewImage
     }
 }

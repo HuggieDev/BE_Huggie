@@ -1,5 +1,8 @@
 import {
     Controller,
+    Delete,
+    Param,
+    ParseUUIDPipe,
     Post,
     UploadedFiles,
     UseInterceptors,
@@ -8,7 +11,6 @@ import { FilesInterceptor } from '@nestjs/platform-express'
 import {
     ApiBody,
     ApiConsumes,
-    ApiOkResponse,
     ApiOperation,
     ApiResponse,
 } from '@nestjs/swagger'
@@ -47,5 +49,20 @@ export class FilesController {
         files: Array<Express.Multer.File>
     ): Promise<String[]> {
         return await this.filesService.uploadImages(files)
+    }
+
+    @Delete(':imageId')
+    @ApiOperation({
+        summary: '이미지 업로드 삭제 API, 1개씩 삭제 가능',
+    })
+    @ApiResponse({
+        status: 200,
+        description: '삭제 성공.',
+        type: Boolean,
+    })
+    async deleteFile(
+        @Param('imageId', ParseUUIDPipe) imageId: string
+    ): Promise<boolean> {
+        return await this.filesService.deleteImage({ imageId })
     }
 }
