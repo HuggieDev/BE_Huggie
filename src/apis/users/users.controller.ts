@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Delete,
+    Param,
+    ParseUUIDPipe,
+    Post,
+} from '@nestjs/common'
 import { CreateUserDto } from './dto/createUser.dto'
 import { User } from './entities/user.entity'
 import { UsersService } from './users.service'
@@ -22,5 +29,20 @@ export class UsersController {
         @Body() createUserDto: CreateUserDto //
     ): Promise<User> {
         return this.usersService.create(createUserDto)
+    }
+
+    @Delete('/user/:userId')
+    @ApiOperation({
+        summary: '유저 탈퇴',
+    })
+    @ApiResponse({
+        status: 200,
+        description: '탈퇴 성공.',
+        type: Boolean,
+    })
+    async deleteUser(
+        @Param('userId', ParseUUIDPipe) userId: string
+    ): Promise<boolean> {
+        return await this.usersService.delete({ userId })
     }
 }
