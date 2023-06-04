@@ -12,9 +12,9 @@ import { UsersModule } from '../users/users.module'
     imports: [
         TypeOrmModule.forFeature([Review]),
         StoreModule,
-        forwardRef(() => ReviewImagesModule),
+        ReviewImagesModule,
         ReviewMenusModule,
-        UsersModule,
+        forwardRef(() => UsersModule),
     ],
     providers: [ReviewsService],
     controllers: [ReviewsController],

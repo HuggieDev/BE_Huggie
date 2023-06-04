@@ -1,7 +1,9 @@
 import {
     ConflictException,
+    Inject,
     Injectable,
     UnprocessableEntityException,
+    forwardRef,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -12,12 +14,16 @@ import {
     IUsersServiceFindOneById,
 } from './interfaces/user.interface'
 import { CreateUserDto } from './dto/createUser.dto'
+import { ReviewsService } from '../reviews/reviews.service'
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
-        private readonly usersRepository: Repository<User>
+        private readonly usersRepository: Repository<User>,
+
+        @Inject(forwardRef(() => ReviewsService))
+        private reviewService: ReviewsService
     ) {}
 
     async findOneById({ userId }: IUsersServiceFindOneById): Promise<User> {
