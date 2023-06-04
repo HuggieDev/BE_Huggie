@@ -53,6 +53,8 @@ export class UsersService {
             throw new UnprocessableEntityException('유저가 존재하지 않습니다')
         }
 
+        await this.reviewService.deleteByUserId({ userId })
+
         const result = await this.usersRepository.softDelete({
             id: userId,
         })
