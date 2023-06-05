@@ -5,3 +5,7 @@ export interface IUsersServiceFindOneByEmail {
 export interface IUsersServiceFindOneById {
     userId: string
 }
+
+export interface IUsersServiceDelete {
+    userId: string
+}

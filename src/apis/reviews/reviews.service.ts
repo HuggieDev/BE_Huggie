@@ -13,6 +13,7 @@ import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
 import { getPagination } from 'src/commons/util/utils'
+import { IReivewServiceDeleteByUserId } from './interfaces/review.interface'
 
 @Injectable()
 export class ReviewsService {
@@ -21,9 +22,10 @@ export class ReviewsService {
         private reviewsRepository: Repository<Review>,
 
         private storesService: StoresService,
-        @Inject(forwardRef(() => ReviewImagesService))
         private reviewImagesService: ReviewImagesService,
         private reviewMenusService: ReviewMenusService,
+
+        @Inject(forwardRef(() => UsersService))
         private usersService: UsersService
     ) {}
 
@@ -107,5 +109,13 @@ export class ReviewsService {
         }
 
         return review
+    }
+
+    async deleteByUserId({ userId }: IReivewServiceDeleteByUserId) {
+        return await this.reviewsRepository.softDelete({
+            user: {
+                id: userId,
+            },
+        })
     }
 }

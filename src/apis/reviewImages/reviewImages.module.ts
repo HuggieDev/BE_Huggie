@@ -9,8 +9,8 @@ import { ReviewsModule } from '../reviews/reviews.module'
 @Module({
     imports: [
         TypeOrmModule.forFeature([ReviewImage]),
-        UsersModule,
         forwardRef(() => ReviewsModule),
+        forwardRef(() => UsersModule),
     ],
     providers: [ReviewImagesService],
     controllers: [ReviewImagesController],

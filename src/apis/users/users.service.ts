@@ -1,18 +1,29 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import {
+    ConflictException,
+    Inject,
+    Injectable,
+    UnprocessableEntityException,
+    forwardRef,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from './entities/user.entity'
 import {
+    IUsersServiceDelete,
     IUsersServiceFindOneByEmail,
     IUsersServiceFindOneById,
 } from './interfaces/user.interface'
 import { CreateUserDto } from './dto/createUser.dto'
+import { ReviewsService } from '../reviews/reviews.service'
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
-        private readonly usersRepository: Repository<User>
+        private readonly usersRepository: Repository<User>,
+
+        @Inject(forwardRef(() => ReviewsService))
+        private reviewService: ReviewsService
     ) {}
 
     async findOneById({ userId }: IUsersServiceFindOneById): Promise<User> {
@@ -33,5 +44,20 @@ export class UsersService {
             email,
             nickName,
         })
+    }
+
+    async delete({ userId }: IUsersServiceDelete): Promise<boolean> {
+        const user = await this.findOneById({ userId })
+
+        if (!user) {
+            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
+        }
+
+        await this.reviewService.deleteByUserId({ userId })
+
+        const result = await this.usersRepository.softDelete({
+            id: userId,
+        })
+        return result.affected ? true : false
     }
 }

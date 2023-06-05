@@ -20,6 +20,7 @@ export class ReviewImagesService {
         @InjectRepository(ReviewImage)
         private reviewImagesRepository: Repository<ReviewImage>,
 
+        @Inject(forwardRef(() => UsersService))
         private usersService: UsersService,
 
         @Inject(forwardRef(() => ReviewsService))

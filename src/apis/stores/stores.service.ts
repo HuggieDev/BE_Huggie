@@ -1,6 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm'
 import { Store } from './entities/store.entity'
-import { Injectable, UnprocessableEntityException } from '@nestjs/common'
+import {
+    Inject,
+    Injectable,
+    UnprocessableEntityException,
+    forwardRef,
+} from '@nestjs/common'
 import { Between, FindOptionsWhere, Repository } from 'typeorm'
 import { CreateStoreInput } from './dto/createStore.dto'
 import { IFindStores } from './interfaces/stores.interface'
@@ -11,6 +16,8 @@ export class StoresService {
     constructor(
         @InjectRepository(Store)
         private readonly storeRepository: Repository<Store>,
+
+        @Inject(forwardRef(() => UsersService))
         private readonly usersService: UsersService
     ) {}
 
