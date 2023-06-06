@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNumber, IsUUID, IsNotEmpty, Min, IsString } from 'class-validator'
+import { IsNumber, IsUUID, IsNotEmpty, IsString } from 'class-validator'
 import { ReviewImage } from 'src/apis/reviewImages/entities/reviewImage.entity'
 import { ReviewMenu } from 'src/apis/reviewMenus/entities/reviewMenu.entity'
 import { Store } from 'src/apis/stores/entities/store.entity'
