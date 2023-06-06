@@ -127,8 +127,12 @@ export class ReviewsService {
             throw new UnprocessableEntityException('리뷰가 존재하지 않습니다.')
         }
 
-        //TODO: relation softDelete
+        await this.reviewImagesService.deleteImagesByReview({
+            reviewId,
+        })
+        await this.reviewMenusService.deleteMenusByReview({ reviewId })
 
-        return await this.reviewsRepository.softDelete(reviewId)
+        const result = await this.reviewsRepository.softDelete(reviewId)
+        return result.affected > 0
     }
 }

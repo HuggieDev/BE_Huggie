@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Review } from 'src/apis/reviews/entities/review.entity'
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+    Column,
+    DeleteDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm'
 
 @Entity()
 export class ReviewMenu {
@@ -21,4 +27,10 @@ export class ReviewMenu {
     })
     @ManyToOne(() => Review)
     review: Review
+
+    @ApiProperty({
+        example: null,
+    })
+    @DeleteDateColumn()
+    deletedAt?: Date
 }

@@ -85,6 +85,17 @@ export class ReviewImagesService {
         return result.affected ? true : false
     }
 
+    async deleteImagesByReview({ reviewId }) {
+        const imgs = await this.reviewImagesRepository.find({
+            where: {
+                review: {
+                    id: reviewId,
+                },
+            },
+        })
+        return this.reviewImagesRepository.softRemove(imgs)
+    }
+
     async fetchOne({ imageId }) {
         const reviewImage = await this.reviewImagesRepository.findOne({
             where: {
