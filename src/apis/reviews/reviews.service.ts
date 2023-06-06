@@ -112,10 +112,23 @@ export class ReviewsService {
     }
 
     async deleteByUserId({ userId }: IReivewServiceDeleteByUserId) {
+        //TODO: relation softDelete
         return await this.reviewsRepository.softDelete({
             user: {
                 id: userId,
             },
         })
+    }
+
+    async deleteById({ reviewId }) {
+        const review = await this.fetchOne({ reviewId })
+
+        if (!review) {
+            throw new UnprocessableEntityException('리뷰가 존재하지 않습니다.')
+        }
+
+        //TODO: relation softDelete
+
+        return await this.reviewsRepository.softDelete(reviewId)
     }
 }
