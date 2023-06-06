@@ -13,7 +13,7 @@ import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
 import { getPagination } from 'src/commons/util/utils'
-import { IReivewServiceDeleteByUserId } from './interfaces/review.interface'
+import { IReviewServiceDeleteByUserId } from './interfaces/review.interface'
 
 @Injectable()
 export class ReviewsService {
@@ -111,13 +111,23 @@ export class ReviewsService {
         return review
     }
 
-    async deleteByUserId({ userId }: IReivewServiceDeleteByUserId) {
-        //TODO: relation softDelete
-        return await this.reviewsRepository.softDelete({
-            user: {
-                id: userId,
+    async deleteByUserId({
+        userId,
+    }: IReviewServiceDeleteByUserId): Promise<boolean> {
+        const reviews = await this.reviewsRepository.find({
+            where: {
+                user: {
+                    id: userId,
+                },
             },
+            relations: ['user'],
         })
+
+        const promiseDelete = reviews.map((e) =>
+            this.deleteById({ reviewId: e.id })
+        )
+        const result = await Promise.all(promiseDelete)
+        return result.every((bool) => bool)
     }
 
     async deleteById({ reviewId }) {

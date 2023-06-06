@@ -5,6 +5,6 @@ export interface IReivewServiceUpdate {
     updateReviewInput: UpdateReviewInput
 }
 
-export interface IReivewServiceDeleteByUserId {
+export interface IReviewServiceDeleteByUserId {
     userId: string
 }
