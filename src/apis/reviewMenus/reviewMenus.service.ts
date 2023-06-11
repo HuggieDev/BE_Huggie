@@ -22,4 +22,15 @@ export class ReviewMenusService {
             }))
         )
     }
+
+    async deleteMenusByReview({ reviewId }: { reviewId: string }) {
+        const menus = await this.reviewMenuRepository.find({
+            where: {
+                review: {
+                    id: reviewId,
+                },
+            },
+        })
+        return await this.reviewMenuRepository.softRemove(menus)
+    }
 }

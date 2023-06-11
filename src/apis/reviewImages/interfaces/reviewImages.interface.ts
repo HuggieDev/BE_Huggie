@@ -16,3 +16,9 @@ export interface IReveiwImagesAdd {
     reviewId: string
     url: string
 }
+
+export interface IReviewImagesDelete {
+    imageId: string
+    userId: string
+    reviewId: string
+}

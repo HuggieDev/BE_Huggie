@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     ParseUUIDPipe,
@@ -63,5 +64,23 @@ export class ReviewsController {
     })
     fetchReview(@Param('reviewId', ParseUUIDPipe) reviewId: string) {
         return this.reviewsService.fetchOne({ reviewId })
+    }
+
+    @Delete('/review/:reviewId')
+    @ApiOperation({
+        summary: '리뷰 개별 삭제',
+    })
+    @ApiResponse({
+        status: 200,
+        description: '삭제 성공.',
+        type: Boolean,
+    })
+    @ApiResponse({
+        status: 422,
+        description: '리뷰가 존재하지 않습니다',
+        type: Error,
+    })
+    deleteReview(@Param('reviewId', ParseUUIDPipe) reviewId: string) {
+        return this.reviewsService.deleteById({ reviewId })
     }
 }

@@ -13,7 +13,7 @@ import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
 import { getPagination } from 'src/commons/util/utils'
-import { IReivewServiceDeleteByUserId } from './interfaces/review.interface'
+import { IReviewServiceDeleteByUserId } from './interfaces/review.interface'
 
 @Injectable()
 export class ReviewsService {
@@ -80,7 +80,7 @@ export class ReviewsService {
         })
     }
 
-    async findAll({ userId, page }) {
+    async findAll({ userId, page }: { userId: string; page: number }) {
         const pageSize = 10
         const skip = getPagination({ page, pageSize })
 
@@ -96,7 +96,7 @@ export class ReviewsService {
         })
     }
 
-    async fetchOne({ reviewId }) {
+    async fetchOne({ reviewId }: { reviewId: string }) {
         const review = await this.reviewsRepository.findOne({
             where: {
                 id: reviewId,
@@ -111,11 +111,38 @@ export class ReviewsService {
         return review
     }
 
-    async deleteByUserId({ userId }: IReivewServiceDeleteByUserId) {
-        return await this.reviewsRepository.softDelete({
-            user: {
-                id: userId,
+    async deleteByUserId({
+        userId,
+    }: IReviewServiceDeleteByUserId): Promise<boolean> {
+        const reviews = await this.reviewsRepository.find({
+            where: {
+                user: {
+                    id: userId,
+                },
             },
+            relations: ['user'],
         })
+
+        const promiseDelete = reviews.map((e) =>
+            this.deleteById({ reviewId: e.id })
+        )
+        const result = await Promise.all(promiseDelete)
+        return result.every((bool) => bool)
+    }
+
+    async deleteById({ reviewId }: { reviewId: string }) {
+        const review = await this.fetchOne({ reviewId })
+
+        if (!review) {
+            throw new UnprocessableEntityException('리뷰가 존재하지 않습니다.')
+        }
+
+        await this.reviewImagesService.deleteImagesByReview({
+            reviewId,
+        })
+        await this.reviewMenusService.deleteMenusByReview({ reviewId })
+
+        const result = await this.reviewsRepository.softDelete(reviewId)
+        return result.affected > 0
     }
 }
