@@ -80,7 +80,7 @@ export class ReviewsService {
         })
     }
 
-    async findAll({ userId, page }) {
+    async findAll({ userId, page }: { userId: string; page: number }) {
         const pageSize = 10
         const skip = getPagination({ page, pageSize })
 
@@ -96,7 +96,7 @@ export class ReviewsService {
         })
     }
 
-    async fetchOne({ reviewId }) {
+    async fetchOne({ reviewId }: { reviewId: string }) {
         const review = await this.reviewsRepository.findOne({
             where: {
                 id: reviewId,
@@ -130,7 +130,7 @@ export class ReviewsService {
         return result.every((bool) => bool)
     }
 
-    async deleteById({ reviewId }) {
+    async deleteById({ reviewId }: { reviewId: string }) {
         const review = await this.fetchOne({ reviewId })
 
         if (!review) {

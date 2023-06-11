@@ -23,7 +23,7 @@ export class ReviewMenusService {
         )
     }
 
-    async deleteMenusByReview({ reviewId }) {
+    async deleteMenusByReview({ reviewId }: { reviewId: string }) {
         const menus = await this.reviewMenuRepository.find({
             where: {
                 review: {

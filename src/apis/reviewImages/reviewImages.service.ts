@@ -10,6 +10,7 @@ import { Repository } from 'typeorm'
 import {
     IReveiwImagesAdd,
     IReviewImagesBulkCreate,
+    IReviewImagesDelete,
 } from './interfaces/reviewImages.interface'
 import { UsersService } from '../users/users.service'
 import { ReviewsService } from '../reviews/reviews.service'
@@ -64,7 +65,11 @@ export class ReviewImagesService {
         })
     }
 
-    async delete({ imageId, userId, reviewId }): Promise<boolean> {
+    async delete({
+        imageId,
+        userId,
+        reviewId,
+    }: IReviewImagesDelete): Promise<boolean> {
         const user = await this.usersService.findOneById({ userId })
 
         if (!user) {
@@ -85,7 +90,7 @@ export class ReviewImagesService {
         return result.affected ? true : false
     }
 
-    async deleteImagesByReview({ reviewId }) {
+    async deleteImagesByReview({ reviewId }: { reviewId: string }) {
         const imgs = await this.reviewImagesRepository.find({
             where: {
                 review: {
@@ -96,7 +101,7 @@ export class ReviewImagesService {
         return this.reviewImagesRepository.softRemove(imgs)
     }
 
-    async fetchOne({ imageId }) {
+    async fetchOne({ imageId }: { imageId: string }) {
         const reviewImage = await this.reviewImagesRepository.findOne({
             where: {
                 id: imageId,
