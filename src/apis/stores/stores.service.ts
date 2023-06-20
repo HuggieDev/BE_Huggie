@@ -1,11 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm'
 import { Store } from './entities/store.entity'
-import {
-    Inject,
-    Injectable,
-    UnprocessableEntityException,
-    forwardRef,
-} from '@nestjs/common'
+import { Inject, Injectable, forwardRef } from '@nestjs/common'
 import { Between, FindOptionsWhere, Repository } from 'typeorm'
 import { CreateStoreInput } from './dto/createStore.dto'
 import { IFindStores } from './interfaces/stores.interface'
@@ -35,10 +30,7 @@ export class StoresService {
         lng,
         radius,
     }: IFindStores): Promise<Store[]> {
-        const user = await this.usersService.findOneById({ userId })
-        if (!user) {
-            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
-        }
+        await this.usersService.findOneById({ userId })
 
         // 1도의 차이에 해당하는 좌표를 계산하기 위한 변환 비율
         const latitudeRatio = 0.00000899322
