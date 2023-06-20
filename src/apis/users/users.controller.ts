@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
     Param,
     ParseUUIDPipe,
     Post,
@@ -44,5 +45,20 @@ export class UsersController {
         @Param('userId', ParseUUIDPipe) userId: string
     ): Promise<boolean> {
         return await this.usersService.delete({ userId })
+    }
+
+    @Get('/user/:userId')
+    @ApiOperation({
+        summary: '유저 조회',
+    })
+    @ApiResponse({
+        status: 201,
+        description: '조회 성공.',
+        type: User,
+    })
+    async fetchUser(
+        @Param('userId', ParseUUIDPipe) userId: string
+    ): Promise<User> {
+        return await this.usersService.findOneById({ userId })
     }
 }
