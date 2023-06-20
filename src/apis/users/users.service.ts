@@ -55,11 +55,7 @@ export class UsersService {
     }
 
     async delete({ userId }: IUsersServiceDelete): Promise<boolean> {
-        const user = await this.findOneById({ userId })
-
-        if (!user) {
-            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
-        }
+        await this.findOneById({ userId })
 
         await this.reviewService.deleteByUserId({ userId })
 
