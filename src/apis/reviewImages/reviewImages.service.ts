@@ -47,11 +47,7 @@ export class ReviewImagesService {
         reviewId,
         url,
     }: IReveiwImagesAdd): Promise<ReviewImage> {
-        const user = await this.usersService.findOneById({ userId })
-
-        if (!user) {
-            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
-        }
+        await this.usersService.findOneById({ userId })
 
         const review = await this.reviewsService.fetchOne({ reviewId })
 
