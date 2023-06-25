@@ -1,8 +1,11 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
-import { IOAuthUser } from './interfaces/auth.interface'
+import {
+    IAuthServiceRestoreAccessToken,
+    IOAuthUser,
+} from './interfaces/auth.interface'
 import { ApiExcludeEndpoint, ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 @Controller()
@@ -22,5 +25,16 @@ export class AuthController {
         @Res() res: Response
     ) {
         return this.authService.loginOAuth({ req, res })
+    }
+
+    @UseGuards(AuthGuard('refresh'))
+    @ApiOperation({ summary: 'refreshToken으로 accessToken 재발급' })
+    @ApiResponse({ status: 200, type: String, description: 'accessToken' })
+    @Post('restoreAccessToken')
+    async restoreAccessToken(
+        @Req() req: Request & IAuthServiceRestoreAccessToken
+    ) {
+        console.log(req)
+        return await this.authService.restoreAccessToken({ user: req.user })
     }
 }
