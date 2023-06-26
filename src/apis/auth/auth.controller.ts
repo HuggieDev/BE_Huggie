@@ -34,7 +34,6 @@ export class AuthController {
     async restoreAccessToken(
         @Req() req: Request & IAuthServiceRestoreAccessToken
     ) {
-        console.log(req)
         return await this.authService.restoreAccessToken({ user: req.user })
     }
 }
