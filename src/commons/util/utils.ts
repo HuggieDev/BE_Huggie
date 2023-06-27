@@ -21,6 +21,5 @@ export const getPagination = ({
 }
 
 export const getRefreshTokenInCookie = (cookies: string) => {
-    if (!cookies) return ''
     return cookies.split('refreshToken=')[1]?.split(';')[0]
 }
