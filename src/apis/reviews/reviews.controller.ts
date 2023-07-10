@@ -11,7 +11,7 @@ import {
 import { ReviewsService } from './reviews.service'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
-import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger'
 
 @Controller('reviews')
 export class ReviewsController {
@@ -46,6 +46,28 @@ export class ReviewsController {
         @Query('page') page: number
     ) {
         return this.reviewsService.findAll({ userId, page })
+    }
+
+    @Get()
+    @ApiOperation({
+        summary: '주소 검색을 통한 지역 조회',
+    })
+    @ApiQuery({
+        name: 'search',
+        example: '구로구',
+    })
+    @ApiResponse({
+        status: 200,
+        description: '조회 성공',
+        // type: Object,
+    })
+    @ApiResponse({
+        status: 422,
+        description: '조회 실패',
+        type: Error,
+    })
+    fetchReviewsByAddress(@Query('search') search: string) {
+        return this.reviewsService.findByAddress({ search })
     }
 
     @Get('/review/:reviewId')
