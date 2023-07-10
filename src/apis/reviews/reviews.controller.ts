@@ -12,6 +12,7 @@ import { ReviewsService } from './reviews.service'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger'
+import { SearchReviewByAddress } from './interfaces/review.interface'
 
 @Controller('reviews')
 export class ReviewsController {
@@ -54,12 +55,12 @@ export class ReviewsController {
     })
     @ApiQuery({
         name: 'search',
-        example: '구로구',
+        description: '구까지 검색 가능. (서울, 서울 구로구, 구로구)',
     })
     @ApiResponse({
         status: 200,
         description: '조회 성공',
-        // type: Object,
+        type: SearchReviewByAddress,
     })
     @ApiResponse({
         status: 422,
