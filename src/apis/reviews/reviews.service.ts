@@ -5,7 +5,7 @@ import {
     forwardRef,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 import { StoresService } from '../stores/stores.service'
@@ -124,6 +124,47 @@ export class ReviewsService {
         )
         const result = await Promise.all(promiseDelete)
         return result.every((bool) => bool)
+    }
+
+    async findByAddress({ search }) {
+        const reviews = await this.reviewsRepository.find({
+            where: {
+                store: {
+                    roadAddress: Like(`%${search}%`),
+                    jibunAddress: Like(`%${search}%`),
+                },
+            },
+            relations: ['user', 'store', 'reviewMenus', 'reviewImages'],
+        })
+
+        const roadAdressList = []
+
+        if (!reviews) {
+            throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
+        } else {
+            reviews.forEach((review) => {
+                const roadAddress = review.store.roadAddress
+                roadAdressList.push(roadAddress)
+            })
+        }
+
+        const filteredAddresses = roadAdressList.filter((address) =>
+            address.includes(search)
+        )
+
+        const searchResult = {}
+        filteredAddresses.forEach((address) => {
+            const splitAddress = address.split(' ')
+            for (let i = 1; i <= 3; i++) {
+                const partialAddress = splitAddress.slice(0, i).join(' ')
+                if (partialAddress.includes(search)) {
+                    searchResult[partialAddress] =
+                        (searchResult[partialAddress] || 0) + 1
+                }
+            }
+        })
+
+        // return { searchResult }
     }
 
     async deleteById({ reviewId }: { reviewId: string }) {
