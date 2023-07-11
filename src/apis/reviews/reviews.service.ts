@@ -152,21 +152,31 @@ export class ReviewsService {
             address.includes(search)
         )
 
-        const searchResult = {}
+        const searchResult = []
         filteredAddresses.forEach((address) => {
             const splitAddress = address.split(' ')
             for (let i = 1; i <= 3; i++) {
                 const partialAddress = splitAddress.slice(0, i).join(' ')
                 if (partialAddress.includes(search)) {
-                    searchResult[partialAddress] =
-                        (searchResult[partialAddress] || 0) + 1
+                    const existingResult = searchResult.find(
+                        (result) => result.address === partialAddress
+                    )
+                    if (existingResult) {
+                        existingResult.count++
+                    } else {
+                        searchResult.push({ address: partialAddress, count: 1 })
+                    }
                 }
             }
         })
 
+        const result = searchResult.sort((a, b) =>
+            a.address.localeCompare(b.address, 'ko-KR')
+        )
+
         const totalCount = await this.countByAddress({ search })
 
-        return { searchResult, totalCount }
+        return { result, totalCount }
     }
 
     // 주소 기반 리뷰 건수 카운팅

@@ -12,14 +12,15 @@ export interface IReviewServiceDeleteByUserId {
 
 export class SearchReviewByAddress {
     @ApiProperty({
-        example: { '서울특별시 구로구': 20, '서울특별시 구로구 디지털로': 15 },
-        required: true,
+        example: [
+            { address: '서울특별시 구로구', count: 20 },
+            { address: '서울특별시 구로구 디지털로', count: 15 },
+        ],
     })
-    searchResult: object
+    result: [string, number]
 
     @ApiProperty({
         example: 15,
-        required: true,
     })
     totalCount: number
 }
