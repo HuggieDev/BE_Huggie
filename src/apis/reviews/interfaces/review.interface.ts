@@ -17,7 +17,7 @@ export class SearchReviewByAddress {
             { address: '서울특별시 구로구 디지털로', count: 15 },
         ],
     })
-    result: [string, number]
+    result: Array<string | number>
 
     @ApiProperty({
         example: 15,

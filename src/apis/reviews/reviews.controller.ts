@@ -67,7 +67,9 @@ export class ReviewsController {
         description: '조회 실패',
         type: Error,
     })
-    fetchReviewsByAddress(@Query('search') search: string) {
+    fetchReviewsByAddress(
+        @Query('search') search: string
+    ): Promise<SearchReviewByAddress> {
         return this.reviewsService.findByAddress({ search })
     }
 

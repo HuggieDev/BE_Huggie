@@ -13,7 +13,10 @@ import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
 import { getPagination } from 'src/commons/util/utils'
-import { IReviewServiceDeleteByUserId } from './interfaces/review.interface'
+import {
+    IReviewServiceDeleteByUserId,
+    SearchReviewByAddress,
+} from './interfaces/review.interface'
 
 @Injectable()
 export class ReviewsService {
@@ -126,7 +129,11 @@ export class ReviewsService {
         return result.every((bool) => bool)
     }
 
-    async findByAddress({ search }) {
+    async findByAddress({
+        search,
+    }: {
+        search: string
+    }): Promise<SearchReviewByAddress> {
         const reviews = await this.reviewsRepository.find({
             where: {
                 store: {
@@ -180,7 +187,7 @@ export class ReviewsService {
     }
 
     // 주소 기반 리뷰 건수 카운팅
-    async countByAddress({ search }) {
+    async countByAddress({ search }: { search: string }): Promise<number> {
         return await this.reviewsRepository.count({
             where: {
                 store: {
