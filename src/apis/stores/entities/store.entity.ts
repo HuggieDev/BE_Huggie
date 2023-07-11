@@ -54,7 +54,7 @@ export class Store {
     roadAddress: string
 
     @ApiProperty({
-        example: '서울특별시 구로구 구로동 188-25 지밸리비즈플라자',
+        example: '서울 구로구 구로동 188-25 지밸리비즈플라자',
         required: true,
     })
     @IsNotEmpty()
