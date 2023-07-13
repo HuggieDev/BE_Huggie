@@ -179,20 +179,7 @@ export class ReviewsService {
             a.address.localeCompare(b.address, 'ko-KR')
         )
 
-        // const totalCount = await this.countByAddress({ search })
         return { result, totalCount }
-    }
-
-    // 주소 기반 리뷰 건수 카운팅
-    async countByAddress({ search }: { search: string }): Promise<number> {
-        return await this.reviewsRepository.count({
-            where: {
-                store: {
-                    roadAddress: Like(`%${search}%`),
-                    jibunAddress: Like(`%${search}%`),
-                },
-            },
-        })
     }
 
     async deleteById({ reviewId }: { reviewId: string }) {
