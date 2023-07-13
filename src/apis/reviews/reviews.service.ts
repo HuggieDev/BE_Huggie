@@ -145,22 +145,20 @@ export class ReviewsService {
         })
 
         const roadAdressList = []
+        let totalCount = 0
 
         if (!reviews) {
             throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
-        } else {
-            reviews.forEach((review) => {
-                const roadAddress = review.store.roadAddress
-                roadAdressList.push(roadAddress)
-            })
         }
 
-        const filteredAddresses = roadAdressList.filter((address) =>
-            address.includes(search)
-        )
+        reviews.forEach(async (review) => {
+            const roadAddress = review.store.roadAddress
+            roadAdressList.push(roadAddress)
+            totalCount++
+        })
 
         const searchResult = []
-        filteredAddresses.forEach((address) => {
+        roadAdressList.forEach((address) => {
             const splitAddress = address.split(' ')
             for (let i = 1; i <= 3; i++) {
                 const partialAddress = splitAddress.slice(0, i).join(' ')
@@ -181,8 +179,7 @@ export class ReviewsService {
             a.address.localeCompare(b.address, 'ko-KR')
         )
 
-        const totalCount = await this.countByAddress({ search })
-
+        // const totalCount = await this.countByAddress({ search })
         return { result, totalCount }
     }
 
