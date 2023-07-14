@@ -11,7 +11,8 @@ import {
 import { ReviewsService } from './reviews.service'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
-import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger'
+import { SearchReviewByAddress } from './interfaces/review.interface'
 
 @Controller('reviews')
 export class ReviewsController {
@@ -46,6 +47,30 @@ export class ReviewsController {
         @Query('page') page: number
     ) {
         return this.reviewsService.findAll({ userId, page })
+    }
+
+    @Get()
+    @ApiOperation({
+        summary: '주소 검색을 통한 지역 조회',
+    })
+    @ApiQuery({
+        name: 'search',
+        description: '구까지 검색 가능. (서울, 서울 구로구, 구로구)',
+    })
+    @ApiResponse({
+        status: 200,
+        description: '조회 성공',
+        type: SearchReviewByAddress,
+    })
+    @ApiResponse({
+        status: 422,
+        description: '조회 실패',
+        type: Error,
+    })
+    fetchReviewsByAddress(
+        @Query('search') search: string
+    ): Promise<SearchReviewByAddress> {
+        return this.reviewsService.findByAddress({ search })
     }
 
     @Get('/review/:reviewId')

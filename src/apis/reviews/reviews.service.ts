@@ -5,7 +5,7 @@ import {
     forwardRef,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { CreateReviewWithStore } from './dto/createReview.dto'
 import { Review } from './entities/review.entity'
 import { StoresService } from '../stores/stores.service'
@@ -13,7 +13,10 @@ import { ReviewImagesService } from '../reviewImages/reviewImages.service'
 import { ReviewMenusService } from '../reviewMenus/reviewMenus.service'
 import { UsersService } from '../users/users.service'
 import { getPagination } from 'src/commons/util/utils'
-import { IReviewServiceDeleteByUserId } from './interfaces/review.interface'
+import {
+    IReviewServiceDeleteByUserId,
+    SearchReviewByAddress,
+} from './interfaces/review.interface'
 
 @Injectable()
 export class ReviewsService {
@@ -124,6 +127,56 @@ export class ReviewsService {
         )
         const result = await Promise.all(promiseDelete)
         return result.every((bool) => bool)
+    }
+
+    async findByAddress({
+        search,
+    }: {
+        search: string
+    }): Promise<SearchReviewByAddress> {
+        const reviews = await this.reviewsRepository.find({
+            where: {
+                store: {
+                    roadAddress: Like(`%${search}%`),
+                    jibunAddress: Like(`%${search}%`),
+                },
+            },
+            relations: ['user', 'store', 'reviewMenus', 'reviewImages'],
+        })
+
+        if (!reviews) {
+            throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
+        }
+
+        const roadAdressList = []
+        reviews.forEach(async (review) => {
+            const roadAddress = review.store.roadAddress
+            roadAdressList.push(roadAddress)
+        })
+
+        const searchResult = []
+        roadAdressList.forEach((address) => {
+            const splitAddress = address.split(' ')
+            for (let i = 1; i <= 3; i++) {
+                const partialAddress = splitAddress.slice(0, i).join(' ')
+                if (partialAddress.includes(search)) {
+                    const existingResult = searchResult.find(
+                        (result) => result.address === partialAddress
+                    )
+                    if (existingResult) {
+                        existingResult.count++
+                    } else {
+                        searchResult.push({ address: partialAddress, count: 1 })
+                    }
+                }
+            }
+        })
+
+        const result = searchResult.sort((a, b) =>
+            a.address.localeCompare(b.address, 'ko-KR')
+        )
+
+        return { result, totalCount: roadAdressList.length }
     }
 
     async deleteById({ reviewId }: { reviewId: string }) {
