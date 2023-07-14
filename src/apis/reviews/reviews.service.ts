@@ -144,17 +144,14 @@ export class ReviewsService {
             relations: ['user', 'store', 'reviewMenus', 'reviewImages'],
         })
 
-        const roadAdressList = []
-        let totalCount = 0
-
         if (!reviews) {
             throw new UnprocessableEntityException('리뷰가 존재하지 않습니다')
         }
 
+        const roadAdressList = []
         reviews.forEach(async (review) => {
             const roadAddress = review.store.roadAddress
             roadAdressList.push(roadAddress)
-            totalCount++
         })
 
         const searchResult = []
@@ -179,7 +176,7 @@ export class ReviewsService {
             a.address.localeCompare(b.address, 'ko-KR')
         )
 
-        return { result, totalCount }
+        return { result, totalCount: roadAdressList.length }
     }
 
     async deleteById({ reviewId }: { reviewId: string }) {
