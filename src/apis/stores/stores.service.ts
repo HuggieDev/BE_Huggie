@@ -56,4 +56,8 @@ export class StoresService {
             relations: ['reviews', 'reviews.user'],
         })
     }
+
+    findStoresByAddress({ search }) {
+        //
+    }
 }

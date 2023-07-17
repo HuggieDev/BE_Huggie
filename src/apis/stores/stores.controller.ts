@@ -2,7 +2,7 @@ import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common'
 import { StoresService } from './stores.service'
 import { Store } from './entities/store.entity'
 import { FetchStoresInput } from './dto/fetchStores.dto'
-import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger'
 
 @Controller('store')
 export class StoreController {
@@ -25,5 +25,26 @@ export class StoreController {
             userId: userId,
             ...fetchStoresInput,
         })
+    }
+    @Get()
+    @ApiOperation({
+        summary: '주소 검색을 통한 식당 조회',
+    })
+    @ApiQuery({
+        name: 'search',
+        description: '구까지 검색 가능. (서울, 서울 구로구, 구로구)',
+    })
+    @ApiResponse({
+        status: 200,
+        description: '조회 성공',
+        // type:
+    })
+    @ApiResponse({
+        status: 422,
+        description: '조회 실패',
+        type: Error,
+    })
+    fetchStoresByAddress(@Query('search') search: string) {
+        return this.storeService.findStoresByAddress({ search })
     }
 }
