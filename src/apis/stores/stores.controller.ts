@@ -3,6 +3,7 @@ import { StoresService } from './stores.service'
 import { Store } from './entities/store.entity'
 import { FetchStoresInput } from './dto/fetchStores.dto'
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger'
+import { SearchStoresByAddress } from './interfaces/stores.interface'
 
 @Controller('store')
 export class StoreController {
@@ -37,7 +38,7 @@ export class StoreController {
     @ApiResponse({
         status: 200,
         description: '조회 성공',
-        // type:
+        type: SearchStoresByAddress,
     })
     @ApiResponse({
         status: 422,
