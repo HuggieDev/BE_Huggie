@@ -1,10 +1,19 @@
 import { InjectRepository } from '@nestjs/typeorm'
 import { Store } from './entities/store.entity'
-import { Inject, Injectable, forwardRef } from '@nestjs/common'
-import { Between, FindOptionsWhere, Repository } from 'typeorm'
+import {
+    Inject,
+    Injectable,
+    UnprocessableEntityException,
+    forwardRef,
+} from '@nestjs/common'
+import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
 import { CreateStoreInput } from './dto/createStore.dto'
-import { IFindStores } from './interfaces/stores.interface'
+import {
+    IFindStores,
+    SearchStoresByAddress,
+} from './interfaces/stores.interface'
 import { UsersService } from '../users/users.service'
+import { ReviewsService } from '../reviews/reviews.service'
 
 @Injectable()
 export class StoresService {
@@ -13,7 +22,10 @@ export class StoresService {
         private readonly storeRepository: Repository<Store>,
 
         @Inject(forwardRef(() => UsersService))
-        private readonly usersService: UsersService
+        private readonly usersService: UsersService,
+
+        @Inject(forwardRef(() => ReviewsService))
+        private reviewsService: ReviewsService
     ) {}
 
     async createStore(createInput: CreateStoreInput): Promise<Store> {
@@ -55,5 +67,31 @@ export class StoresService {
             },
             relations: ['reviews', 'reviews.user'],
         })
+    }
+
+    async findStoresByAddress({
+        search,
+    }: {
+        search: string
+    }): Promise<SearchStoresByAddress[]> {
+        const stores = await this.storeRepository.find({
+            where: {
+                roadAddress: Like(`%${search}%`),
+                jibunAddress: Like(`%${search}%`),
+            },
+            relations: ['reviews'],
+        })
+
+        if (!stores) {
+            throw new UnprocessableEntityException('검색된 식당이 없습니다.')
+        }
+
+        const result = stores.map((store) => {
+            const reviewsCount = store.reviews.length
+            const { name, jibunAddress, reviews, ...rest } = store
+            return { name, jibunAddress, reviews, reviewsCount }
+        })
+
+        return result
     }
 }
