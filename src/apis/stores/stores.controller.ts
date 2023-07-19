@@ -45,7 +45,9 @@ export class StoreController {
         description: '조회 실패',
         type: Error,
     })
-    fetchStoresByAddress(@Query('search') search: string) {
+    fetchStoresByAddress(
+        @Query('search') search: string
+    ): Promise<SearchStoresByAddress[]> {
         return this.storeService.findStoresByAddress({ search })
     }
 }
