@@ -8,7 +8,10 @@ import {
 } from '@nestjs/common'
 import { Between, FindOptionsWhere, Like, Repository } from 'typeorm'
 import { CreateStoreInput } from './dto/createStore.dto'
-import { IFindStores } from './interfaces/stores.interface'
+import {
+    IFindStores,
+    SearchStoresByAddress,
+} from './interfaces/stores.interface'
 import { UsersService } from '../users/users.service'
 import { ReviewsService } from '../reviews/reviews.service'
 
@@ -66,7 +69,11 @@ export class StoresService {
         })
     }
 
-    async findStoresByAddress({ search }) {
+    async findStoresByAddress({
+        search,
+    }: {
+        search: string
+    }): Promise<SearchStoresByAddress[]> {
         const stores = await this.storeRepository.find({
             where: {
                 roadAddress: Like(`%${search}%`),
@@ -81,7 +88,8 @@ export class StoresService {
 
         const result = stores.map((store) => {
             const reviewsCount = store.reviews.length
-            return { store, reviewsCount }
+            const { name, jibunAddress, reviews, ...rest } = store
+            return { name, jibunAddress, reviews, reviewsCount }
         })
 
         return result
