@@ -47,7 +47,7 @@ export class UsersController {
         return await this.usersService.delete({ userId })
     }
 
-    @Get('/user/:userId')
+    @Get('/user/:email')
     @ApiOperation({
         summary: '유저 조회',
     })
@@ -56,9 +56,12 @@ export class UsersController {
         description: '조회 성공.',
         type: User,
     })
-    async fetchUser(
-        @Param('userId', ParseUUIDPipe) userId: string
-    ): Promise<User> {
-        return await this.usersService.findOneById({ userId })
+    @ApiResponse({
+        status: 422,
+        description: '조회 실패',
+        type: Error,
+    })
+    async fetchUser(@Param('email') email: string): Promise<User> {
+        return await this.usersService.findOneByEmail({ email })
     }
 }
