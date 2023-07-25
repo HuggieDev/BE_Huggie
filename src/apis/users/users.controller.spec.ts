@@ -35,7 +35,9 @@ describe('UsersController', () => {
     describe('deleteUser', () => {
         it('should return true', async () => {
             usersService.delete.mockResolvedValueOnce(true)
-            expect(await usersController.deleteUser('userId')).toBe(true)
+            expect(await usersController.deleteUser(expect.any(String))).toBe(
+                true
+            )
         })
     })
 
@@ -43,8 +45,9 @@ describe('UsersController', () => {
         it('should return an user', async () => {
             const mockUser = createMock<User>()
 
-            usersService.findOneById.mockResolvedValueOnce(mockUser)
-            expect(await usersController.fetchUser('userId')).toBe(mockUser)
+            usersService.findOneByEmail.mockResolvedValueOnce(mockUser)
+            const result = await usersController.fetchUser(expect.any(String))
+            expect(result).toBe(mockUser)
         })
     })
 })
