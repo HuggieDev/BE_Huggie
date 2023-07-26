@@ -26,6 +26,16 @@ export class UsersService {
         private reviewService: ReviewsService
     ) {}
 
+    async findOneUser({ email }: IUsersServiceFindOneByEmail): Promise<User> {
+        const user = await this.findOneByEmail({ email })
+
+        if (!user) {
+            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
+        }
+
+        return user
+    }
+
     async findOneById({ userId }: IUsersServiceFindOneById): Promise<User> {
         const user = await this.usersRepository.findOne({
             where: { id: userId },
@@ -44,9 +54,6 @@ export class UsersService {
         const user = await this.usersRepository.findOne({
             where: { email },
         })
-
-        if (!user)
-            throw new UnprocessableEntityException('유저가 존재하지 않습니다')
 
         return user
     }
