@@ -12,6 +12,7 @@ import {
     IUsersServiceDelete,
     IUsersServiceFindOneByEmail,
     IUsersServiceFindOneById,
+    IUsersServiceFindOneUser,
 } from './interfaces/user.interface'
 import { CreateUserDto } from './dto/createUser.dto'
 import { ReviewsService } from '../reviews/reviews.service'
@@ -26,7 +27,7 @@ export class UsersService {
         private reviewService: ReviewsService
     ) {}
 
-    async findOneUser({ email }: IUsersServiceFindOneByEmail): Promise<User> {
+    async findOneUser({ email }: IUsersServiceFindOneUser): Promise<User> {
         const user = await this.findOneByEmail({ email })
 
         if (!user) {
