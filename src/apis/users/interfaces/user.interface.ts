@@ -1,3 +1,7 @@
+export interface IUsersServiceFindOneUser {
+    email: string
+}
+
 export interface IUsersServiceFindOneByEmail {
     email: string
 }

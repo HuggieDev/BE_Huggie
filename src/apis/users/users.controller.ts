@@ -62,6 +62,6 @@ export class UsersController {
         type: Error,
     })
     async fetchUser(@Param('email') email: string): Promise<User> {
-        return await this.usersService.findOneByEmail({ email })
+        return await this.usersService.findOneUser({ email })
     }
 }
