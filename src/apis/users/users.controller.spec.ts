@@ -45,7 +45,7 @@ describe('UsersController', () => {
         it('should return an user', async () => {
             const mockUser = createMock<User>()
 
-            usersService.findOneByEmail.mockResolvedValueOnce(mockUser)
+            usersService.findOneUser.mockResolvedValueOnce(mockUser)
             const result = await usersController.fetchUser(expect.any(String))
             expect(result).toBe(mockUser)
         })
