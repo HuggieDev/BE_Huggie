@@ -31,9 +31,7 @@ export class AuthController {
     @ApiOperation({ summary: 'refreshToken으로 accessToken 재발급' })
     @ApiResponse({ status: 200, type: String, description: 'accessToken' })
     @Post('restoreAccessToken')
-    async restoreAccessToken(
-        @Req() req: Request & IAuthServiceRestoreAccessToken
-    ) {
-        return await this.authService.restoreAccessToken({ user: req.user })
+    restoreAccessToken(@Req() req: Request & IAuthServiceRestoreAccessToken) {
+        return this.authService.restoreAccessToken({ user: req.user })
     }
 }
